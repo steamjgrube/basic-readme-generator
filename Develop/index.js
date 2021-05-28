@@ -1,63 +1,91 @@
-// TODO: Include packages needed for this application
-const fs = require('fs')
 const inquirer = require('inquirer');
-const generateMarkdown = require('./utils/generateMarkdown');
-// TODO: Create an array of questions for user input
+const fs = require('fs');
+const generateMarkdown = require('./utils/generateMarkdown.js')
+
+
 const questions = [
     {
         type: 'input',
-        prompt: 'Enter the name of your project',
-        name: 'title'
+        name: 'title',
+        message: 'Provide a title for your project: ',
+        validate: userTitle => {
+            if (userTitle) {
+                return true;
+            }
+        }
     },
     {
         type: 'input',
-        prompt: 'Enter a description of your project',
-        name: 'description'
+        name: 'description',
+        message: 'Provide a description of your project',
+        validate: userDesc => {
+            if (userDesc) {
+                return true;
+            }
+        }
     },
     {
         type: 'input',
-        prompt: 'How do you use this application?',
-        name: 'howtouse'
+        name: 'installation',
+        message: 'List any Installation instructions here',
+        validate: userInstall => {
+            if (userInstall) {
+                return true;
+            }
+        }
     },
     {
         type: 'input',
-        prompt: 'How do you install this application?',
-        name: 'howtoinstall',
+        name: 'usage',
+        message: 'How do you use this project?',
+        validate: userUsage => {
+            if (userUsage) {
+                return true;
+            }
+        }
     },
     {
         type: 'checkbox',
-        prompt: 'Choose a license for this project',
-        name: 'license',
-        choices: ['MIT', 'Mozilla-Public', 'Apache', 'Common-Development-and-Distribution', 'GNU-General-Public'],
+        name: 'licensing',
+        message: 'Choose a license for your project',
+        choices: ['Apache', 'MIT', 'Mozilla-Public', 'GNU-General-Public'],
+        validate: userLicense => {
+            if (userLicense) {
+                return true;
+            }
+        }
     },
     {
         type: 'input',
-        prompt: 'Enter your Github username',
         name: 'github',
+        message: 'Enter your GitHub Username (Required)',
+        validate: userGithub => {
+            if (userGithub) {
+                return true;
+            }
+        }
     },
     {
         type: 'input',
-        prompt: 'Enter your email',
-        name: 'email'
-    }
+        name: 'email',
+        message: 'Would you like to include your email?',
+    },
 ];
 
-// TODO: Create a function to write README file
-function writeFile(fileName, data) {
+function writeToFile(fileName, data) {
     fs.writeFile(fileName, data, (err) => {
         if (err)
             throw err;
-        console.log("Success!")
-    })
-}
+        console.log('Success!')
+    });
+};
 
-// TODO: Create a function to initialize app
 function init() {
     inquirer.prompt(questions)
     .then(function (userInput) {
-        writeFile("README.md", generateMarkdown(userInput));
+        console.log(userInput)
+        writeToFile("README.md", generateMarkdown(userInput));
     });
-}
+};
 
-// Function call to initialize app
 init();
